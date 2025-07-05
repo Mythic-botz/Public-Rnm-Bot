@@ -204,7 +204,7 @@ Use /help for more information.
 # Main execution
 if __name__ == "__main__":
     # Replace with your bot token from @BotFather
-    BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+    BOT_TOKEN = "7921810145:AAGEm9Jq869GGKQXNK_FcRx1g6DrJZzjStY"
     
     if BOT_TOKEN == "YOUR_BOT_TOKEN_HERE":
         print("❌ Please replace BOT_TOKEN with your actual bot token from @BotFather")
