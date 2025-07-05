@@ -5,6 +5,8 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 from telegram.constants import ChatAction
 import logging
+from threading import Thread
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -133,7 +135,7 @@ Use /help for more information.
             return
         
         # Check file size (Telegram bot API has limits)
-        if document.file_size > 50 * 1024 * 1024:  # 50MB limit for demo
+        if document.file_size > 1000 * 1024 * 1024:  # 50MB limit for demo
             await update.message.reply_text("File is too large. Please send files smaller than 50MB.")
             return
         
@@ -199,15 +201,36 @@ Use /help for more information.
     def run(self):
         """Start the bot"""
         print("🎌 Anime Auto Rename Bot starting...")
+        
+        # Start health check server in background if PORT is set (for web services)
+        port = os.getenv('PORT')
+        if port:
+            def start_health_server():
+                class HealthHandler(BaseHTTPRequestHandler):
+                    def do_GET(self):
+                        self.send_response(200)
+                        self.send_header('Content-type', 'text/plain')
+                        self.end_headers()
+                        self.wfile.write(b'Bot is running!')
+                    
+                    def log_message(self, format, *args):
+                        pass  # Suppress logs
+                
+                server = HTTPServer(('0.0.0.0', int(port)), HealthHandler)
+                server.serve_forever()
+            
+            Thread(target=start_health_server, daemon=True).start()
+            print(f"Health check server running on port {port}")
+        
         self.app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 # Main execution
 if __name__ == "__main__":
-    # Replace with your bot token from @BotFather
-    BOT_TOKEN = "7921810145:AAGEm9Jq869GGKQXNK_FcRx1g6DrJZzjStY"
+    # Get bot token from environment variable
+    BOT_TOKEN = os.getenv('7921810145:AAGEm9Jq869GGKQXNK_FcRx1g6DrJZzjStY')
     
-    if BOT_TOKEN == "YOUR_BOT_TOKEN_HERE":
-        print("❌ Please replace BOT_TOKEN with your actual bot token from @BotFather")
+    if not BOT_TOKEN:
+        print("❌ Please set BOT_TOKEN environment variable")
         print("Visit https://t.me/BotFather to create a new bot and get your token")
         exit(1)
     
