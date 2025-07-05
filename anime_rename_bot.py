@@ -226,11 +226,11 @@ Use /help for more information.
 
 # Main execution
 if __name__ == "__main__":
-    # Get bot token from environment variable
-    BOT_TOKEN = os.getenv('7921810145:AAGEm9Jq869GGKQXNK_FcRx1g6DrJZzjStY')
+    # Replace with your bot token from @BotFather
+    BOT_TOKEN = "7921810145:AAGEm9Jq869GGKQXNK_FcRx1g6DrJZzjStY"
     
-    if not BOT_TOKEN:
-        print("❌ Please set BOT_TOKEN environment variable")
+    if BOT_TOKEN == "YOUR_BOT_TOKEN_HERE":
+        print("❌ Please replace BOT_TOKEN with your actual bot token from @BotFather")
         print("Visit https://t.me/BotFather to create a new bot and get your token")
         exit(1)
     
