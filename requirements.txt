@@ -1,2 +1,2 @@
-python-3.11
+python
 python-telegram-bot>=20.0
